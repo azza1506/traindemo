@@ -37,7 +37,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 @dataclass(frozen=True)
 class TrainingConfig:
     BATCH_SIZE:    int = 16  # Reduce from 48 to 16 or 8
-    EPOCHS:        int = 200
+    EPOCHS:        int = 100
     LEARNING_RATE: float = 0.00005
  
 @dataclass(frozen=True)
@@ -46,7 +46,7 @@ class DatasetConfig:
  
 @dataclass(frozen=True)
 class ModelConfig:
-    MODEL_NAME: str = 'microsoft/trocr-base-printed'
+    MODEL_NAME: str = 'microsoft/trocr-small-printed'
 
 
 def visualize(dataset_path):
@@ -252,26 +252,6 @@ def ocr(image, processor, model):
     generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
     return generated_text
 
-def eval_new_data(
-    data_path=os.path.join(DatasetConfig.DATA_ROOT, 'test/image', '*'),
-    num_samples=50
-):
-    image_paths = glob.glob(data_path)
-    for i, image_path in tqdm(enumerate(image_paths), total=len(image_paths)):
-        if i == num_samples:
-            break
-        image = read_and_show(image_path)
-        text = ocr(image, processor, trained_model)
-        plt.figure(figsize=(7, 4))
-        plt.imshow(image)
-        plt.title(text)
-        plt.axis('off')
-        plt.show()
- 
-eval_new_data(
-    data_path=os.path.join(DatasetConfig.DATA_ROOT, 'test/image', '*'),
-    num_samples=100
-)
 
 # Đánh giá model bằng TextMatch, CER và WER
 print("\n" + "="*50)
