@@ -37,7 +37,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 @dataclass(frozen=True)
 class TrainingConfig:
     BATCH_SIZE:    int = 16  # Reduce from 48 to 16 or 8
-    EPOCHS:        int = 100
+    EPOCHS:        int = 50
     LEARNING_RATE: float = 0.00005
  
 @dataclass(frozen=True)
